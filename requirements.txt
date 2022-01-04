@@ -1,4 +1,7 @@
+# python 3.9.6 version
 numpy
 pandas
 matplotlib
 scipy
+pylint
+black
