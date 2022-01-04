@@ -4,3 +4,7 @@
 .coverage
 htmlcov
 __pycache__
+.mypy_cache
+outputs
+
+test.py
