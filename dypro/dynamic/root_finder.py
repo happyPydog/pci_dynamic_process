@@ -27,7 +27,7 @@ class RootFinder:
         except ValueError:
             return np.nan
 
-    def get_k1_fixed_k2(self, k2, n, a=1, b=10):
+    def get_k1_fixed_k2(self, k2, n, a=0, b=10):
         assert n >= 2, "sample size 'n' must greater than 2."
         try:
             return brenth(self._solving_k1, a, b, args=(k2, n))

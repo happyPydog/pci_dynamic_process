@@ -1,9 +1,7 @@
-"""
-Impletation dynamic process with mean shift and variance change,
-also provide adjustment magnitudes for mean and variance.
-"""
-from .mean_shift import MeanShift
-from .var_change import VarChange
+from .mean_shift import MeanShift, NormalMeanShift
+from .var_change import VarChange, NormalVarChange, NormalSChange, NormalRChange
+
+FACTORS_DIR = "dypro/dynamic/factors_table.csv"
 
 
 class DPMV:
@@ -18,3 +16,27 @@ class DPMV:
 
     def power(self, k1, k2, n):
         return 1 - self.beta(k1, k2, n)
+
+
+class NormalMeanVarChart(DPMV):
+    """X-bar, var control chart."""
+
+    def __init__(self):
+        self.m_chart = NormalMeanShift()
+        self.v_chart = NormalVarChange()
+
+
+class NormalMeanSChart(DPMV):
+    """X-bar, S control chart."""
+
+    def __init__(self):
+        self.m_chart = NormalMeanShift()
+        self.v_chart = NormalSChange()
+
+
+class NormalMeanRChart(DPMV):
+    """X-bar, R control chart."""
+
+    def __init__(self):
+        self.m_chart = NormalMeanShift()
+        self.v_chart = NormalRChange(FACTORS_DIR)
