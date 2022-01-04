@@ -1,0 +1,4 @@
+[MASTER]
+disable=missing-funciton-docstring,missing-class-docstring,missing-module-docstring
+[FORMAT]
+good-names=i,j,x,y,id

@@ -1,2 +1,6 @@
-# python venv
 .venv
+**/*.pyc
+**/.DS_Store
+.coverage
+htmlcov
+__pycache__
