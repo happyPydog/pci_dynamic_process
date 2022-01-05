@@ -4,7 +4,7 @@ from scipy.stats import norm
 from .model import DPMV
 
 
-class RootFinder:
+class BrenthOptimize:
     def __init__(self, chart: DPMV, power=0.5):
         self.chart = chart
         self.power_ = power
@@ -35,14 +35,16 @@ class RootFinder:
             return np.nan
 
     def _solving_var_adjustment(self, k2, n):
-        return self.chart.v_chart.beta(k2, n) - self.power_
+        return self.chart.v_chart.beta(k2, n, self.chart.alpha) - self.power_
 
     def _solving_k2(self, k2, k1, n):
         return (
-            self.chart.m_chart.beta(k1, k2, n) * self.chart.v_chart.beta(k2, n)
+            self.chart.m_chart.beta(k1, k2, n)
+            * self.chart.v_chart.beta(k2, n, self.chart.alpha)
         ) - self.power_
 
     def _solving_k1(self, k1, k2, n):
         return (
-            self.chart.m_chart.beta(k1, k2, n) * self.chart.v_chart.beta(k2, n)
+            self.chart.m_chart.beta(k1, k2, n)
+            * self.chart.v_chart.beta(k2, n, self.chart.alpha)
         ) - self.power_
