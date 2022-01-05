@@ -1,11 +1,11 @@
 import numpy as np
 from scipy.optimize import brenth
 from scipy.stats import norm
-from .model import DPMV
+from .base import BaseChart
 
 
 class BrenthOptimize:
-    def __init__(self, chart: DPMV, power=0.5):
+    def __init__(self, chart: BaseChart, power=0.5):
         self.chart = chart
         self.power_ = power
 
