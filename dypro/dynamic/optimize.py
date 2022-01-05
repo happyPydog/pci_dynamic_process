@@ -12,7 +12,7 @@ class BrenthOptimize:
     def get_mean_adjustment(self, n):
         return -(norm.ppf(1 - self.power_) - 3) / np.sqrt(n)
 
-    def get_var_adjustment(self, n: int, a=1, b=10):
+    def get_var_adjustment(self, n, a=1, b=10):
         assert n >= 2, "sample size 'n' at least equal to 2."
         try:
             return brenth(self._solving_var_adjustment, a, b, args=(n))
