@@ -1,10 +1,28 @@
+from typing import Protocol
 import numpy as np
 from scipy.optimize import brenth
 from scipy.stats import norm
 from .base import BaseChart
 
 
-class BrenthOptimize:
+class Optimizer(Protocol):
+    def __init__(self, chart: BaseChart, power: float):
+        ...
+
+    def get_mean_adjustment(self):
+        ...
+
+    def get_var_adjustment(self):
+        ...
+
+    def get_k2_fixed_k1(self):
+        ...
+
+    def get_k1_fixed_k2(self):
+        ...
+
+
+class BrenthOptimizer:
     def __init__(self, chart: BaseChart, power=0.5):
         self.chart = chart
         self.power_ = power
@@ -16,7 +34,6 @@ class BrenthOptimize:
         assert n >= 2, "sample size 'n' at least equal to 2."
         try:
             return brenth(self._solving_var_adjustment, a, b, args=(n))
-
         except ValueError:
             return np.nan
 
