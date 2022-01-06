@@ -1,6 +1,6 @@
 Dynamic model
 ************************
-Let us consider $\bar_{X}, R$ control chart and $\alpha = 0.0027$ as an example:
+Let us consider $\bar_{X}, R$ control chart and $\alpha = 0.0027$ as an example.
 .. code:: python
 
 
