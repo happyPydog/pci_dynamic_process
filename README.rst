@@ -1,7 +1,12 @@
+dypro: Dynamic Process with Mean Shift and Variance Change
+====================================================================
+
+
 Dynamic model
 ************************
 Let us consider $\bar_{X}, R$ control chart and $\alpha = 0.0027$ as an example.
 .. code:: python
+
 
 
     from dypro.dynamic import NormalMeanRChart
