@@ -9,6 +9,7 @@ outputs
 fig
 code_example
 # test
+test.py
 test_create_k2.py
 
 
