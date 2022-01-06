@@ -14,4 +14,4 @@ Create k2 table
         k1_num=0.1,
         n_max=30,
     )
-    df.to_csv("XV_k2.csv", index=False, float_format="%g")
+    df.to_csv("xv_k2.csv", index=False, float_format="%g")
