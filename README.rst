@@ -5,7 +5,7 @@ dypro: Dynamic Process with Mean Shift and Variance Change
 Dynamic Model
 ************************
 
-Let us consider $\bar_{X}, R$ control chart and $\alpha = 0.0027$ as an example.
+Here is an example for computing detection power:
 
 .. code:: python
 
