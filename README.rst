@@ -1,19 +1,5 @@
-# Dynamic Process with Mean Shift and Varaince Change
-
----
-
-
-CODE EXAMPLE
-===================
-
----
-
 Create k2 table
 ************************
-
-We refer here to our documentation for all the details.
-However, for instance, executing NSGA2:
-
 .. code:: python
 
 
