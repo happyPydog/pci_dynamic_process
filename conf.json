@@ -1,0 +1,23 @@
+{
+    "k1_max": 2,
+    "k1_num": 0.001,
+    "n_max": 30,
+    "parameters": {
+        "mean": 12.086,
+        "sigma": 0.327,
+        "USL": 14,
+        "LSL": 10
+    },
+    "plot_conf": {
+        "figsize": [
+            9,
+            6
+        ],
+        "figname": [
+            "$S^2$ control chart",
+            "$S$ control chart",
+            "$R$ control chart"
+        ],
+        "dpi": 1200
+    }
+}
