@@ -6,19 +6,19 @@
     "parameters": {
         "mean": 12.086,
         "sigma": 0.327,
-        "USL": 14,
-        "LSL": 10
+        "USL": 14.0,
+        "LSL": 10.0
     },
-    "plot_conf": {
-        "figsize": [
-            9,
-            6
-        ],
-        "figname": [
-            "$S^2$ control chart",
-            "$S$ control chart",
-            "$R$ control chart"
-        ],
-        "dpi": 1200
-    }
+    
+    "figsize": [
+        9,
+        6
+    ],
+    "figname": [
+        "$S^2$ control chart",
+        "$S$ control chart",
+        "$R$ control chart"
+    ],
+    "dpi": 1200
+    
 }

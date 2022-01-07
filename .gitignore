@@ -6,7 +6,6 @@ htmlcov
 __pycache__
 .mypy_cache
 outputs
-fig
 code_example
 # test
 test.py
