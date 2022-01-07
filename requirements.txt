@@ -6,3 +6,4 @@ scipy
 pylint
 black
 rich
+SciencePlots
