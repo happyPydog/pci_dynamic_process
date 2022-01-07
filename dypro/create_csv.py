@@ -83,5 +83,101 @@ def create_proposed_cpk(
         )
 
     cpk_dict = {key: np.array(value).flatten() for key, value in cpk_dict.items()}
-    df = pd.DataFrame(cpk_dict)
-    return df
+    return pd.DataFrame(cpk_dict)
+
+
+def created_proposed_yeild(
+    proposed_csv: pd.DataFrame,
+    optimizer: Optimizer,
+    k2_df: pd.DataFrame,
+    param: Parameters,
+) -> pd.DataFrame:
+    """Create ncppm csv with specific paraemter."""
+    mean, sigma, USL, LSL = (param.mean, param.sigma, param.USL, param.LSL)
+    k1, k2 = proposed_csv["k1 min"].values, proposed_csv["k2 min"].values
+    subgroup_size = np.arange(2, len(k2_df) + 2)
+    bothe_k1 = np.array([optimizer.get_mean_adjustment(n) for n in subgroup_size])
+    pearn_k2 = np.array([optimizer.get_var_adjustment(n) for n in subgroup_size])
+
+    table = {
+        "n": subgroup_size,
+        "Proposed Method NCMMP": F.ncppm(F.dynamic_cpk(mean, sigma, USL, LSL, k1, k2)),
+        "Bothe NCMMP": F.ncppm(F.dynamic_cpk(mean, sigma, USL, LSL, bothe_k1, k2)),
+        "Pearn NCMMP": F.ncppm(F.dynamic_cpk(mean, sigma, USL, LSL, k1, pearn_k2)),
+        "Tai NCMMP": F.ncppm(F.dynamic_cpk(mean, sigma, USL, LSL, bothe_k1, pearn_k2)),
+        "Proposed Method Millon NC": F.million_nc(
+            F.dynamic_cpk(mean, sigma, USL, LSL, k1, k2)
+        ),
+        "Bothe Millon NC": F.million_nc(
+            F.dynamic_cpk(mean, sigma, USL, LSL, bothe_k1, k2)
+        ),
+        "Pearn Millon NC": F.million_nc(
+            F.dynamic_cpk(mean, sigma, USL, LSL, k1, pearn_k2)
+        ),
+        "Tai Millon NC": F.million_nc(
+            F.dynamic_cpk(mean, sigma, USL, LSL, bothe_k1, pearn_k2)
+        ),
+    }
+    return pd.DataFrame(table)
+
+
+def create_previous_cpk(
+    chart: BaseChart,
+    optimizer: Optimizer,
+    k2_df: pd.DataFrame,
+    param: Parameters,
+) -> pd.DataFrame:
+    """Creat cpk table base on previous method."""
+    mean, sigma, USL, LSL = (param.mean, param.sigma, param.USL, param.LSL)
+    subgroup_size = np.arange(2, len(k2_df) + 2)
+    bothe_k1 = np.array([optimizer.get_mean_adjustment(n) for n in subgroup_size])
+    pearn_k2 = np.array([optimizer.get_var_adjustment(n) for n in subgroup_size])
+    bothe_k2 = np.ones(len(subgroup_size))
+    pearn_k1 = np.zeros(len(subgroup_size))
+
+    # Bothe
+    cpk_dict = {"n": subgroup_size}
+    cpk_dict["Bothe_k1"] = bothe_k1
+    cpk_dict["Bothe_k2"] = bothe_k2
+    cpk_dict["Bothe_cpk"] = F.dynamic_cpk(
+        mean=mean,
+        sigma=sigma,
+        USL=USL,
+        LSL=LSL,
+        k1=bothe_k1,
+        k2=bothe_k2,
+    )
+    cpk_dict["Bothe_Power"] = [
+        chart.power(k1, k2, n) for k1, k2, n in zip(bothe_k1, bothe_k2, subgroup_size)
+    ]
+
+    # Pearn
+    cpk_dict["Pearn_k1"] = pearn_k1
+    cpk_dict["Pearn_k2"] = pearn_k2
+    cpk_dict["Pearn_cpk"] = F.dynamic_cpk(
+        mean=mean,
+        sigma=sigma,
+        USL=USL,
+        LSL=LSL,
+        k1=pearn_k1,
+        k2=pearn_k2,
+    )
+    cpk_dict["Pearn_Power"] = [
+        chart.power(k1, k2, n) for k1, k2, n in zip(pearn_k1, pearn_k2, subgroup_size)
+    ]
+
+    # Tai
+    cpk_dict["Tai_k1"] = bothe_k1
+    cpk_dict["Tai_k2"] = pearn_k2
+    cpk_dict["Tai_cpk"] = F.dynamic_cpk(
+        mean=mean,
+        sigma=sigma,
+        USL=USL,
+        LSL=LSL,
+        k1=bothe_k1,
+        k2=pearn_k2,
+    )
+    cpk_dict["Tai_Power"] = [
+        chart.power(k1, k2, n) for k1, k2, n in zip(bothe_k1, pearn_k2, subgroup_size)
+    ]
+    return pd.DataFrame(cpk_dict)

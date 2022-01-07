@@ -9,16 +9,16 @@ class Optimizer(Protocol):
     def __init__(self, chart: BaseChart, power: float):
         ...
 
-    def get_mean_adjustment(self):
+    def get_mean_adjustment(self, n):
         ...
 
-    def get_var_adjustment(self):
+    def get_var_adjustment(self, n):
         ...
 
-    def get_k2_fixed_k1(self):
+    def get_k2_fixed_k1(self, k1, n):
         ...
 
-    def get_k1_fixed_k2(self):
+    def get_k1_fixed_k2(self, k2, n):
         ...
 
 
