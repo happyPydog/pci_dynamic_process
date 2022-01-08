@@ -6,9 +6,8 @@ htmlcov
 __pycache__
 .mypy_cache
 outputs
-fig
 code_example
-# test
+test
 test.py
 test_create_k2.py
 

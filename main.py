@@ -48,6 +48,7 @@ def main():
         yeild_df = created_proposed_yeild(
             proposed_csv=proposed_df, optimizer=optimizer, k2_df=k2_df, param=param
         )
+
         yeild_df.to_csv(f"csv/yeild_{name}.csv", index=False)
 
 
