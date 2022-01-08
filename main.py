@@ -1,4 +1,5 @@
 import json
+from warnings import catch_warnings
 import numpy as np
 import pandas as pd
 from dypro.dynamic import NormalMeanVarChart, NormalMeanSChart, NormalMeanRChart
@@ -12,6 +13,7 @@ from dypro.dynamic.optimize import BrenthOptimizer
 from dypro.plot import PlotGraph
 from dypro._decorator import RunTime
 
+CHART_LIST = [NormalMeanVarChart(), NormalMeanSChart(), NormalMeanRChart()]
 CHART_NAME = ["v", "s", "r"]
 FIGNAME = [
     "$S^2$ control chart",
@@ -20,6 +22,7 @@ FIGNAME = [
 ]
 K2_DIR = ["csv/v_k2.csv", "csv/s_k2.csv", "csv/r_k2.csv"]
 SUBGROUP_SIZE = [5, 10, 15, 20]
+N = 5
 
 
 @RunTime()
@@ -34,10 +37,9 @@ def main():
         n=np.arange(2, conf["n_max"] + 1),
         k1=np.arange(0, conf["k1_max"] + conf["k1_num"], conf["k1_num"]),
     )
-    chart_list = [NormalMeanVarChart(), NormalMeanSChart(), NormalMeanRChart()]
 
     for chart, k2_dir, chartname, figname in zip(
-        chart_list, K2_DIR, CHART_NAME, FIGNAME
+        CHART_LIST, K2_DIR, CHART_NAME, FIGNAME
     ):
 
         # optimizer
@@ -101,6 +103,25 @@ def main():
         plotter.k1_k2_power(
             n=5, save_path=f"fig/k1_k2_power_{chartname}.png", k1_max=3, k2_max=3
         )
+
+        ################
+        # plot surface #
+        ################
+
+        # scaping r chart for reducing run time
+        if chartname != "r":
+            plotter.plot_power_surface(
+                save_path=f"fig/power_surface_N={N}_{chartname}.png", n=N
+            )
+            plotter.plot_power_surface(
+                save_path=f"fig/power_surface_add_power_line_N={N}_{chartname}.png",
+                n=N,
+                alpha=0.5,
+                add_power_line=True,
+            )
+            plotter.plot_power_contourf(
+                save_path=f"fig/power_contourf_N={N}_{chartname}.png", n=N
+            )
 
 
 if __name__ == "__main__":
