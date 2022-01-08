@@ -19,6 +19,24 @@ class PlotGraph:
     pearn_k2: np.ndarray
     figname: str
 
+    def plot_k2(self, k1_list: list[str], save_path):
+        max_len = len(self.plot_conf.k2_df[k1_list[-1]].dropna())
+        with plt.style.context(["science", "ieee"]):
+            fig, ax = plt.subplots()
+            plt_param = dict(xlabel="$n$", ylabel="$k_2$")
+            for k1 in k1_list:
+                k2 = self.plot_conf.k2_df[k1]
+                ax.plot(
+                    np.arange(2, max_len + 2),
+                    k2[:max_len],
+                    label=f"$k_1$={float(k1):.1f}",
+                )
+            ax.legend(loc="upper right")
+            ax.autoscale(tight=True)
+            ax.set(**plt_param)
+            fig.savefig(save_path, dpi=self.plot_conf.dpi, bbox_inches="tight")
+            plt.close()
+
     def cpk(self, save_path="./cpk_comparison.png"):
         """Comparing dynamic cpk brtween proposed and previous method."""
         mean, sigma, USL, LSL = (

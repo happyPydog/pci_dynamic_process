@@ -88,8 +88,11 @@ def main():
             pearn_k2=pearn_k2,
             figname=figname,
         )
+        plotter.plot_k2(
+            ["0.2", "0.3", "0.4", "0.5"], save_path=f"fig/k2_{chartname}.png"
+        )
         plotter.cpk(save_path=f"fig/cpk_comparison_{chartname}.png")
-        plotter.ncppm(save_path=f"fig/cpk_comparison_{chartname}.png")
+        plotter.ncppm(save_path=f"fig/ncmmp_comparison_{chartname}.png")
         plotter.k1_power(
             subgroup_size=SUBGROUP_SIZE,
             save_path=f"fig/k1_power_{chartname}.png",
@@ -108,19 +111,18 @@ def main():
         # plot surface #
         ################
 
-        # scaping r chart for reducing run time
         if chartname != "r":
             plotter.plot_power_surface(
-                save_path=f"fig/power_surface_N={N}_{chartname}.png", n=N
+                save_path=f"fig/power_surface_n={N}_{chartname}.png", n=N
             )
             plotter.plot_power_surface(
-                save_path=f"fig/power_surface_add_power_line_N={N}_{chartname}.png",
+                save_path=f"fig/power_surface_add_power_line_n={N}_{chartname}.png",
                 n=N,
                 alpha=0.5,
                 add_power_line=True,
             )
             plotter.plot_power_contourf(
-                save_path=f"fig/power_contourf_N={N}_{chartname}.png", n=N
+                save_path=f"fig/power_contourf_n={N}_{chartname}.png", n=N
             )
 
 
