@@ -14,24 +14,23 @@ def create_k2(optimizer: Optimizer, k1_max=3, k1_num=0.001, n_max=30) -> pd.Data
         optimizer.get_k2_fixed_k1(k1, n)
         for n in track(
             n_list,
-            description=f"Solving chart k2...",
+            description="Solving chart k2...",
         )
         for k1 in k1_list
     ]
     k2 = np.array(k2).reshape(n_max - 1, -1)
-    df = pd.DataFrame(k2, columns=k1_list, index=n_list)
-    return df
+    return pd.DataFrame(k2, columns=k1_list, index=n_list)
 
 
 def create_proposed_cpk(
-    chart: BaseChart, df: pd.DataFrame, param: Parameters
+    chart: BaseChart, k2_df: pd.DataFrame, param: Parameters
 ) -> pd.DataFrame:
     """Create csv file for the dynamic Cpk table."""
 
-    k1_max = int(df.columns[-1])
-    num = float(df.columns[1])
+    k1_max = int(k2_df.columns[-1])
+    num = float(k2_df.columns[1])
     k1 = np.arange(0, k1_max + num, num)
-    n = np.arange(2, len(df) + 2)
+    n = np.arange(2, len(k2_df) + 2)
 
     cpk_dict = {
         "n": n,
@@ -48,7 +47,7 @@ def create_proposed_cpk(
         "power max": [],
     }
 
-    for i, k2 in enumerate(df.values):
+    for i, k2 in enumerate(k2_df.values):
         non_one_idx = np.where(k2 > 1)
         k1_list = k1[non_one_idx]
         k2_list = k2[non_one_idx]
