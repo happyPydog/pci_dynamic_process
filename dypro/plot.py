@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -6,6 +7,8 @@ from rich.progress import track
 from .dynamic import BaseChart
 from .pci import functional as F
 from .config import Parameters, AdjConf, PlotConf
+
+plt.style.use(["science", "ieee"])
 
 
 @dataclass
@@ -203,10 +206,10 @@ class PlotGraph:
                 )
             ]
         ).reshape(k1.shape)
-        _, ax = plt.subplots(
+        fig, ax = plt.subplots(
             figsize=self.plot_conf.figsize, subplot_kw={"projection": "3d"}
         )
-        ax.plot_surface(
+        surf = ax.plot_surface(
             k1, k2, power, rstride=15, cstride=15, cmap="viridis", alpha=alpha
         )
         ax.view_init(azim=10)
@@ -215,6 +218,7 @@ class PlotGraph:
         ax.set_zlabel("$power$", color="r")
         ax.set_xlim(-k1_max, k1_max)
         ax.set_ylim(0, k2_max + step)
+        # fig.colorbar(surf, shrink=0.5, aspect=5)
 
         if add_power_line:
             k1_right = np.array(
@@ -227,7 +231,67 @@ class PlotGraph:
             k2 = np.append(k2_left, k2_right)
             ax.plot(k1, k2, self.chart.power(k1, k2, n), c="r", ls="--", alpha=1)
 
-        plt.savefig(save_path, dpi=self.plot_conf.dpi)
+        plt.savefig(save_path, dpi=self.plot_conf.dpi, bbox_inches="tight")
+        plt.close()
+
+    def plot_cpk_surface(
+        self,
+        save_path="./cpk_surface.png",
+        k1_max=2,
+        k2_max=3,
+        step=0.01,
+        add_power_line=False,
+        alpha=1,
+        n: Optional[int] = 30,
+    ):
+        """Plot 3D surface for cpk."""
+
+        assert k1_max | k2_max > 0, "k1_stop and k2_stop must > 0"
+
+        k1 = np.arange(0, k1_max + step, step)
+        k2 = np.arange(1, k2_max + step, step)
+        k1, k2 = np.meshgrid(k1, k2)
+        dynamic_cpk = F.dynamic_cpk(
+            mean=self.param.mean,
+            sigma=self.param.sigma,
+            USL=self.param.USL,
+            LSL=self.param.LSL,
+            k1=k1,
+            k2=k2,
+        )
+
+        fig, ax = plt.subplots(
+            figsize=self.plot_conf.figsize, subplot_kw={"projection": "3d"}
+        )
+
+        surf = ax.plot_surface(
+            k1, k2, dynamic_cpk, rstride=15, cstride=15, cmap="viridis", alpha=alpha
+        )
+
+        if add_power_line:
+            k1_proposed = np.array(list(map(float, self.plot_conf.k2_df.columns)))
+            k2_proposed = self.plot_conf.k2_df.values[n - 2]
+            idxs = np.where(k2_proposed == np.nan)
+            k1_proposed = np.delete(k1_proposed, idxs)
+            k2_proposed = np.delete(k2_proposed, idxs)
+            cpk_proposed = F.dynamic_cpk(
+                mean=self.param.mean,
+                sigma=self.param.sigma,
+                USL=self.param.USL,
+                LSL=self.param.LSL,
+                k1=k1_proposed,
+                k2=k2_proposed,
+            )
+            ax.plot(k1_proposed, k2_proposed, cpk_proposed, c="r", ls="--", alpha=1)
+
+        ax.view_init(azim=10)
+        ax.set_xlabel("$k_1$", color="b")
+        ax.set_ylabel("$k_2$", color="b")
+        ax.set_zlabel("$dynamic$ $C_{pk}$", color="r")
+        ax.set_xlim(0, k1_max + step)
+        ax.set_ylim(1, k2_max + step)
+
+        plt.savefig(save_path, dpi=self.plot_conf.dpi, bbox_inches="tight")
         plt.close()
 
     def plot_power_contourf(
@@ -259,5 +323,5 @@ class PlotGraph:
         plt.ylabel("$power$")
         plt.xlim(-2, 2)
         plt.ylim(0, 3)
-        plt.savefig(save_path, dpi=self.plot_conf.dpi)
+        plt.savefig(save_path, dpi=self.plot_conf.dpi, bbox_inches="tight")
         plt.close()

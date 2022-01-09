@@ -1,5 +1,5 @@
 import json
-from warnings import catch_warnings
+import re
 import numpy as np
 import pandas as pd
 from dypro.dynamic import NormalMeanVarChart, NormalMeanSChart, NormalMeanRChart
@@ -23,6 +23,7 @@ FIGNAME = [
 K2_DIR = ["csv/v_k2.csv", "csv/s_k2.csv", "csv/r_k2.csv"]
 SUBGROUP_SIZE = [5, 10, 15, 20]
 N = 5
+FIGSIZE = (9, 6)
 
 
 @RunTime()
@@ -49,7 +50,7 @@ def main():
         k2_df = pd.read_csv(k2_dir)
 
         # setting plot_conf
-        plot_conf = PlotConf(k2_df=k2_df, figsize=conf["figsize"], dpi=conf["dpi"])
+        plot_conf = PlotConf(k2_df=k2_df, figsize=FIGSIZE, dpi=conf["dpi"])
 
         ################
         # create table #
@@ -88,6 +89,7 @@ def main():
             pearn_k2=pearn_k2,
             figname=figname,
         )
+
         plotter.plot_k2(
             ["0.2", "0.3", "0.4", "0.5"], save_path=f"fig/k2_{chartname}.png"
         )
@@ -111,19 +113,28 @@ def main():
         # plot surface #
         ################
 
-        if chartname != "r":
-            plotter.plot_power_surface(
-                save_path=f"fig/power_surface_n={N}_{chartname}.png", n=N
-            )
-            plotter.plot_power_surface(
-                save_path=f"fig/power_surface_add_power_line_n={N}_{chartname}.png",
-                n=N,
-                alpha=0.5,
-                add_power_line=True,
-            )
-            plotter.plot_power_contourf(
-                save_path=f"fig/power_contourf_n={N}_{chartname}.png", n=N
-            )
+        # if chartname != "r":
+        plotter.plot_cpk_surface(
+            save_path=f"fig/cpk_surface_n=30_{chartname}.png",
+        )
+        plotter.plot_cpk_surface(
+            save_path=f"fig/cpk_surface_add_power_line_n=30_{chartname}.png",
+            add_power_line=True,
+            alpha=0.5,
+            n=30,
+        )
+        plotter.plot_power_surface(
+            save_path=f"fig/power_surface_n={N}_{chartname}.png", n=N
+        )
+        plotter.plot_power_surface(
+            save_path=f"fig/power_surface_add_power_line_n={N}_{chartname}.png",
+            add_power_line=True,
+            alpha=0.5,
+            n=N,
+        )
+        plotter.plot_power_contourf(
+            save_path=f"fig/power_contourf_n={N}_{chartname}.png", n=N
+        )
 
 
 if __name__ == "__main__":
