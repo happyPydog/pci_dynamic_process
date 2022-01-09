@@ -1,5 +1,4 @@
 import json
-import re
 import numpy as np
 import pandas as pd
 from dypro.dynamic import NormalMeanVarChart, NormalMeanSChart, NormalMeanRChart
