@@ -24,6 +24,7 @@ K2_DIR = ["csv/v_k2.csv", "csv/s_k2.csv", "csv/r_k2.csv"]
 SUBGROUP_SIZE = [5, 10, 15, 20]
 N = 5
 FIGSIZE = (9, 6)
+RESULT_DIR = "example_result"
 
 
 @RunTime()
@@ -33,7 +34,7 @@ def main():
         conf = json.load(f)
 
     # create instance object for config
-    param = Parameters(**conf["parameters"])
+    param = Parameters(mean=1.506, sigma=0.1398, USL=2.0, LSL=1.0)
     adj_conf = AdjConf(
         n=np.arange(2, conf["n_max"] + 1),
         k1=np.arange(0, conf["k1_max"] + conf["k1_num"], conf["k1_num"]),
@@ -57,19 +58,19 @@ def main():
         ################
         # proposed cpk table
         proposed_df = create_proposed_cpk(chart=chart, k2_df=k2_df, param=param)
-        proposed_df.to_csv(f"csv/proposed_cpk_{chartname}.csv", index=False)
+        proposed_df.to_csv(f"{RESULT_DIR}/proposed_cpk_{chartname}.csv", index=False)
 
         # previous
         pre_df = create_previous_cpk(
             chart=chart, optimizer=optimizer, k2_df=k2_df, param=param
         )
-        pre_df.to_csv(f"csv/previous_cpk_{chartname}.csv", index=False)
+        pre_df.to_csv(f"{RESULT_DIR}/previous_cpk_{chartname}.csv", index=False)
 
         # yeild table
         yeild_df = created_proposed_yeild(
             proposed_csv=proposed_df, optimizer=optimizer, k2_df=k2_df, param=param
         )
-        yeild_df.to_csv(f"csv/yeild_{chartname}.csv", index=False)
+        yeild_df.to_csv(f"{RESULT_DIR}/yeild_{chartname}.csv", index=False)
 
         ###########################################
         # plot 2D result with specific parameters #
@@ -91,22 +92,25 @@ def main():
         )
 
         plotter.plot_k2(
-            ["0.2", "0.3", "0.4", "0.5"], save_path=f"fig/k2_{chartname}.png"
+            ["0.2", "0.3", "0.4", "0.5"], save_path=f"{RESULT_DIR}/k2_{chartname}.png"
         )
-        plotter.cpk(save_path=f"fig/cpk_comparison_{chartname}.png")
-        plotter.ncppm(save_path=f"fig/ncppm_comparison_{chartname}.png")
+        plotter.cpk(save_path=f"{RESULT_DIR}/cpk_comparison_{chartname}.png")
+        plotter.ncppm(save_path=f"{RESULT_DIR}/ncppm_comparsion_{chartname}.png")
         plotter.k1_power(
             subgroup_size=SUBGROUP_SIZE,
-            save_path=f"fig/k1_power_{chartname}.png",
+            save_path=f"{RESULT_DIR}/k1_power_{chartname}.png",
             k1_max=3,
         )
         plotter.k2_power(
             subgroup_size=SUBGROUP_SIZE,
-            save_path=f"fig/k2_power_{chartname}.png",
+            save_path=f"{RESULT_DIR}/k2_power_{chartname}.png",
             k2_max=3,
         )
         plotter.k1_k2_power(
-            n=5, save_path=f"fig/k1_k2_power_{chartname}.png", k1_max=3, k2_max=3
+            n=5,
+            save_path=f"{RESULT_DIR}/k1_k2_power_{chartname}.png",
+            k1_max=3,
+            k2_max=3,
         )
 
         ################
@@ -114,27 +118,27 @@ def main():
         ################
 
         plotter.plot_cpk_surface(
-            save_path=f"fig/cpk_surface_n=30_{chartname}.png",
+            save_path=f"{RESULT_DIR}/cpk_surface_n=30_{chartname}.png",
         )
         plotter.plot_cpk_surface(
-            save_path=f"fig/cpk_surface_add_power_line_n=30_{chartname}.png",
+            save_path=f"{RESULT_DIR}/cpk_surface_add_power_line_n=30_{chartname}.png",
             add_power_line=True,
             alpha=0.5,
-            n=30,
+            n=N,
         )
 
         if chartname != "r":
             plotter.plot_power_surface(
-                save_path=f"fig/power_surface_n={N}_{chartname}.png", n=N
+                save_path=f"{RESULT_DIR}/power_surface_n={N}_{chartname}.png", n=N
             )
             plotter.plot_power_surface(
-                save_path=f"fig/power_surface_add_power_line_n={N}_{chartname}.png",
+                save_path=f"{RESULT_DIR}/power_surface_add_power_line_n={N}_{chartname}.png",
                 add_power_line=True,
                 alpha=0.5,
                 n=N,
             )
             plotter.plot_power_contourf(
-                save_path=f"fig/power_contourf_n={N}_{chartname}.png", n=N
+                save_path=f"{RESULT_DIR}/power_contourf_n={N}_{chartname}.png", n=N
             )
 
 

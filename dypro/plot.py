@@ -93,7 +93,7 @@ class PlotGraph:
 
         with plt.style.context(["science", "ieee"]):
             fig, ax = plt.subplots()
-            plt_param = dict(xlabel="$n$", ylabel="$Dynamic$ $C_{pk}$")
+            plt_param = dict(xlabel="$n$", ylabel="$ncppm$")
             ax.plot(
                 self.adj_conf.n,
                 F.ncppm(F.dynamic_cpk(mean, sigma, USL, LSL, k1, k2)),
@@ -117,7 +117,7 @@ class PlotGraph:
                 label="Tai",
             )
 
-            ax.legend(loc="lower right")
+            ax.legend(loc="upper right")
             ax.autoscale(tight=True)
             ax.set(**plt_param)
             fig.savefig(save_path, dpi=self.plot_conf.dpi, bbox_inches="tight")
@@ -320,7 +320,7 @@ class PlotGraph:
         plt.contourf(xx, yy, z)
         plt.plot(k1, k2, c="r", ls="--")
         plt.xlabel("$k_1$")
-        plt.ylabel("$power$")
+        plt.ylabel("$k_2$")
         plt.xlim(-2, 2)
         plt.ylim(0, 3)
         plt.savefig(save_path, dpi=self.plot_conf.dpi, bbox_inches="tight")
