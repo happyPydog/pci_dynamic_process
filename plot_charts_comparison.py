@@ -5,17 +5,17 @@ from dypro.pci import functional as F
 
 CSV_DIR = ["csv/proposed_r.csv", "csv/proposed_s.csv", "csv/proposed_v.csv"]
 SAMPLE_SIZE = np.arange(2, 31)
-MEAN = 12.086
-SIGMA = 0.327
-USL = 14.0
-LSL = 10.0
+MEAN = 1.506
+SIGMA = 0.1398
+USL = 2.0
+LSL = 1.0
 
 
 def main():
 
-    r_csv = pd.read_csv("csv/proposed_cpk_r.csv")
-    s_csv = pd.read_csv("csv/proposed_cpk_s.csv")
-    v_csv = pd.read_csv("csv/proposed_cpk_v.csv")
+    r_csv = pd.read_csv("example_result/proposed_cpk_r.csv")
+    s_csv = pd.read_csv("example_result/proposed_cpk_s.csv")
+    v_csv = pd.read_csv("example_result/proposed_cpk_v.csv")
 
     with plt.style.context(["science", "ieee"]):
         fig, ax = plt.subplots()
@@ -38,7 +38,7 @@ def main():
     ax.legend(loc="lower right")
     ax.autoscale(tight=True)
     ax.set(**plt_param)
-    fig.savefig("chats_comparision.png", dpi=1000, bbox_inches="tight")
+    fig.savefig("chats_comparision_example_3-1.png", dpi=1000, bbox_inches="tight")
     plt.close()
 
 
