@@ -1,4 +1,4 @@
-from typing import Optional, Protocol
+from typing import Protocol
 import numpy as np
 import pandas as pd
 from scipy.stats import chi2, chi
