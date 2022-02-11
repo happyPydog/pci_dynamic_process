@@ -32,10 +32,8 @@ class NormalSChange:
     """S chart dynamic process with variance change under normal distribution."""
 
     def beta(self, k2, n, alpha):
-        B6 = F.c4(n) + 3 * np.sqrt(1 - F.c4(n) ** 2)
-        B5 = np.maximum(0, F.c4(n) - 3 * np.sqrt(1 - F.c4(n) ** 2))
-        UCL = B6 * np.sqrt(n - 1) / (k2)
-        LCL = B5 * np.sqrt(n - 1) / (k2)
+        UCL = F.B4(n) * np.sqrt(n - 1) / (k2)
+        LCL = F.B3(n) * np.sqrt(n - 1) / (k2)
 
         return chi.cdf(UCL, n - 1) - chi.cdf(LCL, n - 1)
 
