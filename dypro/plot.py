@@ -59,20 +59,20 @@ class PlotGraph:
                 F.dynamic_cpk(mean, sigma, USL, LSL, k1, k2),
                 label="Proposed Method",
             )
-            ax.plot(
-                self.adj_conf.n,
-                F.dynamic_cpk(mean, sigma, USL, LSL, self.bothe_k1, 1),
-                label="Mean Shift",
-            )
-            ax.plot(
-                self.adj_conf.n,
-                F.dynamic_cpk(mean, sigma, USL, LSL, 0, self.pearn_k2),
-                label="Variance Change",
-            )
+            # ax.plot(
+            #     self.adj_conf.n,
+            #     F.dynamic_cpk(mean, sigma, USL, LSL, self.bothe_k1, 1),
+            #     label="Mean Shift",
+            # )
+            # ax.plot(
+            #     self.adj_conf.n,
+            #     F.dynamic_cpk(mean, sigma, USL, LSL, 0, self.pearn_k2),
+            #     label="Variance Change",
+            # )
             ax.plot(
                 self.adj_conf.n,
                 F.dynamic_cpk(mean, sigma, USL, LSL, self.bothe_k1, self.pearn_k2),
-                label="Tai",
+                label="Previous Method",
             )
 
             ax.legend(loc="lower right")
@@ -99,22 +99,22 @@ class PlotGraph:
                 F.ncppm(F.dynamic_cpk(mean, sigma, USL, LSL, k1, k2)),
                 label="Proposed Method",
             )
-            ax.plot(
-                self.adj_conf.n,
-                F.ncppm(F.dynamic_cpk(mean, sigma, USL, LSL, self.bothe_k1, 1)),
-                label="Mean Shift",
-            )
-            ax.plot(
-                self.adj_conf.n,
-                F.ncppm(F.dynamic_cpk(mean, sigma, USL, LSL, 0, self.pearn_k2)),
-                label="Variance Change",
-            )
+            # ax.plot(
+            #     self.adj_conf.n,
+            #     F.ncppm(F.dynamic_cpk(mean, sigma, USL, LSL, self.bothe_k1, 1)),
+            #     label="Mean Shift",
+            # )
+            # ax.plot(
+            #     self.adj_conf.n,
+            #     F.ncppm(F.dynamic_cpk(mean, sigma, USL, LSL, 0, self.pearn_k2)),
+            #     label="Variance Change",
+            # )
             ax.plot(
                 self.adj_conf.n,
                 F.ncppm(
                     F.dynamic_cpk(mean, sigma, USL, LSL, self.bothe_k1, self.pearn_k2)
                 ),
-                label="Tai",
+                label="Previous Method",
             )
 
             ax.legend(loc="upper right")
