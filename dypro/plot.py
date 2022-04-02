@@ -132,7 +132,36 @@ class PlotGraph:
             fig.savefig(save_path, dpi=self.plot_conf.dpi, bbox_inches="tight")
             plt.close()
 
-    def ncppm_ratio(self, save_path="ncppm_comarison.png"):
+    def cpk_ratio(self, save_path="cpk_ratio.png"):
+        mean, sigma, USL, LSL = (
+            self.param.mean,
+            self.param.sigma,
+            self.param.USL,
+            self.param.LSL,
+        )
+        k1 = self.proposed_df["k1 min"].values
+        k2 = self.proposed_df["k2 min"].values
+
+        with plt.style.context(["science", "ieee"]):
+            fig, ax = plt.subplots()
+            plt_param = dict(xlabel="$n$", ylabel="$C_{pk}$ $Ratio$")
+
+            # calculated cpk
+            proposed_cpk = F.dynamic_cpk(mean, sigma, USL, LSL, k1, k2)
+            current_cpk = F.dynamic_cpk(
+                mean, sigma, USL, LSL, self.bothe_k1, self.pearn_k2
+            )
+
+            ax.plot(
+                self.adj_conf.n,
+                proposed_cpk / current_cpk,
+            )
+            ax.autoscale(tight=True)
+            ax.set(**plt_param)
+            fig.savefig(save_path, dpi=self.plot_conf.dpi, bbox_inches="tight")
+            plt.close()
+
+    def ncppm_ratio(self, save_path="ncppm_ratio.png"):
         mean, sigma, USL, LSL = (
             self.param.mean,
             self.param.sigma,

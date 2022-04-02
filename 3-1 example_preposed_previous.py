@@ -77,6 +77,7 @@ def main():
         plotter.cpk(
             save_path=f"{RESULT_DIR}/cpk(PI)_comparison_{chartname}.png", ci=True
         )
+        plotter.cpk_ratio(save_path=f"{RESULT_DIR}/cpk_ratio_{chartname}.png")
         plotter.ncppm(save_path=f"{RESULT_DIR}/ncppm_comparsion_{chartname}.png")
         plotter.ncppm_ratio(
             save_path=f"{RESULT_DIR}/ncppm_ratio_comparsion_{chartname}.png"
