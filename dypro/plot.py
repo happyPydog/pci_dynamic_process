@@ -59,16 +59,16 @@ class PlotGraph:
                 F.dynamic_cpk(mean, sigma, USL, LSL, k1, k2),
                 label="Worst-Case",
             )
-            ax.plot(
-                self.adj_conf.n,
-                F.dynamic_cpk(mean, sigma, USL, LSL, self.bothe_k1, 1),
-                label="Mean Shift",
-            )
-            ax.plot(
-                self.adj_conf.n,
-                F.dynamic_cpk(mean, sigma, USL, LSL, 0, self.pearn_k2),
-                label="Variance Change",
-            )
+            # ax.plot(
+            #     self.adj_conf.n,
+            #     F.dynamic_cpk(mean, sigma, USL, LSL, self.bothe_k1, 1),
+            #     label="Mean Shift",
+            # )
+            # ax.plot(
+            #     self.adj_conf.n,
+            #     F.dynamic_cpk(mean, sigma, USL, LSL, 0, self.pearn_k2),
+            #     label="Variance Change",
+            # )
             ax.plot(
                 self.adj_conf.n,
                 F.dynamic_cpk(mean, sigma, USL, LSL, self.bothe_k1, self.pearn_k2),
@@ -81,7 +81,7 @@ class PlotGraph:
                     self.proposed_df["cpk pct 025"],
                     self.proposed_df["cpk pct 975"],
                     alpha=0.5,
-                    label="95 persentage interval",
+                    label="95 Persentage Interval",
                 )
 
             ax.legend(loc="lower right")
@@ -127,6 +127,35 @@ class PlotGraph:
             )
 
             ax.legend(loc="upper right")
+            ax.autoscale(tight=True)
+            ax.set(**plt_param)
+            fig.savefig(save_path, dpi=self.plot_conf.dpi, bbox_inches="tight")
+            plt.close()
+
+    def ncppm_ratio(self, save_path="ncppm_comarison.png"):
+        mean, sigma, USL, LSL = (
+            self.param.mean,
+            self.param.sigma,
+            self.param.USL,
+            self.param.LSL,
+        )
+        k1 = self.proposed_df["k1 min"].values
+        k2 = self.proposed_df["k2 min"].values
+
+        with plt.style.context(["science", "ieee"]):
+            fig, ax = plt.subplots()
+            plt_param = dict(xlabel="$n$", ylabel="$NCPPM$ $Ratio$")
+
+            # calculated cpk
+            proposed_ncppm = F.ncppm(F.dynamic_cpk(mean, sigma, USL, LSL, k1, k2))
+            current_ncppm = F.ncppm(
+                F.dynamic_cpk(mean, sigma, USL, LSL, self.bothe_k1, self.pearn_k2)
+            )
+
+            ax.plot(
+                self.adj_conf.n,
+                current_ncppm / proposed_ncppm,
+            )
             ax.autoscale(tight=True)
             ax.set(**plt_param)
             fig.savefig(save_path, dpi=self.plot_conf.dpi, bbox_inches="tight")
