@@ -40,7 +40,7 @@ class PlotGraph:
             fig.savefig(save_path, dpi=self.plot_conf.dpi, bbox_inches="tight")
             plt.close()
 
-    def cpk(self, save_path="./cpk_comparison.png"):
+    def cpk(self, save_path="./cpk_comparison.png", ci=False):
         """Comparing dynamic cpk brtween proposed and previous method."""
         mean, sigma, USL, LSL = (
             self.param.mean,
@@ -57,23 +57,32 @@ class PlotGraph:
             ax.plot(
                 self.adj_conf.n,
                 F.dynamic_cpk(mean, sigma, USL, LSL, k1, k2),
-                label="Proposed Method",
+                label="Worst-Case",
             )
-            # ax.plot(
-            #     self.adj_conf.n,
-            #     F.dynamic_cpk(mean, sigma, USL, LSL, self.bothe_k1, 1),
-            #     label="Mean Shift",
-            # )
-            # ax.plot(
-            #     self.adj_conf.n,
-            #     F.dynamic_cpk(mean, sigma, USL, LSL, 0, self.pearn_k2),
-            #     label="Variance Change",
-            # )
+            ax.plot(
+                self.adj_conf.n,
+                F.dynamic_cpk(mean, sigma, USL, LSL, self.bothe_k1, 1),
+                label="Mean Shift",
+            )
+            ax.plot(
+                self.adj_conf.n,
+                F.dynamic_cpk(mean, sigma, USL, LSL, 0, self.pearn_k2),
+                label="Variance Change",
+            )
             ax.plot(
                 self.adj_conf.n,
                 F.dynamic_cpk(mean, sigma, USL, LSL, self.bothe_k1, self.pearn_k2),
-                label="Previous Method",
+                label="Current Method",
             )
+
+            if ci:
+                ax.fill_between(
+                    self.adj_conf.n,
+                    self.proposed_df["cpk pct 025"],
+                    self.proposed_df["cpk pct 975"],
+                    alpha=0.5,
+                    label="95 persentage interval",
+                )
 
             ax.legend(loc="lower right")
             ax.autoscale(tight=True)
@@ -93,7 +102,7 @@ class PlotGraph:
 
         with plt.style.context(["science", "ieee"]):
             fig, ax = plt.subplots()
-            plt_param = dict(xlabel="$n$", ylabel="$ncppm$")
+            plt_param = dict(xlabel="$n$", ylabel="$NCPPM$")
             ax.plot(
                 self.adj_conf.n,
                 F.ncppm(F.dynamic_cpk(mean, sigma, USL, LSL, k1, k2)),
@@ -114,7 +123,7 @@ class PlotGraph:
                 F.ncppm(
                     F.dynamic_cpk(mean, sigma, USL, LSL, self.bothe_k1, self.pearn_k2)
                 ),
-                label="Previous Method",
+                label="Current Method",
             )
 
             ax.legend(loc="upper right")

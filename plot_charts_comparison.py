@@ -27,17 +27,17 @@ def main():
         ax.plot(
             SAMPLE_SIZE,
             F.dynamic_cpk(MEAN, SIGMA, USL, LSL, r_csv["k1 min"], r_csv["k2 min"]),
-            label="$R$ chart",
+            label=r"($\bar X$, $R$) $\mathrm{charts}$",
         )
         ax.plot(
             SAMPLE_SIZE,
             F.dynamic_cpk(MEAN, SIGMA, USL, LSL, s_csv["k1 min"], s_csv["k2 min"]),
-            label="$S$ chart",
+            label=r"($\bar X$, $S$) $\mathrm{charts}$",
         )
         ax.plot(
             SAMPLE_SIZE,
             F.dynamic_cpk(MEAN, SIGMA, USL, LSL, v_csv["k1 min"], v_csv["k2 min"]),
-            label="$S^2$ chart",
+            label=r"($\bar X$, $S^2$) $\mathrm{charts}$",
         )
     ax.legend(loc="lower right")
     ax.autoscale(tight=True)

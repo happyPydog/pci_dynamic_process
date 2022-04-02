@@ -73,7 +73,7 @@ def main():
             figname=figname,
         )
 
-        plotter.cpk(save_path=f"{RESULT_DIR}/cpk_comparison_{chartname}.png")
+        plotter.cpk(save_path=f"{RESULT_DIR}/cpk_comparison_{chartname}.png", ci=True)
         plotter.ncppm(save_path=f"{RESULT_DIR}/ncppm_comparsion_{chartname}.png")
 
 
