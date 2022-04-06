@@ -126,6 +126,12 @@ class PlotGraph:
                 label="Current Method",
             )
 
+            # ax.plot(
+            #     self.adj_conf.n,
+            #     2 * F.ncppm(F.dynamic_cpk(mean, sigma, USL, LSL, k1, k2)),
+            #     label="Proposed Method (double)",
+            # )
+
             ax.legend(loc="upper right")
             ax.autoscale(tight=True)
             ax.set(**plt_param)
@@ -180,10 +186,9 @@ class PlotGraph:
             current_ncppm = F.ncppm(
                 F.dynamic_cpk(mean, sigma, USL, LSL, self.bothe_k1, self.pearn_k2)
             )
-
             ax.plot(
                 self.adj_conf.n,
-                current_ncppm / proposed_ncppm,
+                current_ncppm - proposed_ncppm,
             )
             ax.autoscale(tight=True)
             ax.set(**plt_param)
