@@ -1,4 +1,4 @@
-dypro: Dynamic Process with Mean Shift and Variance Change
+Dynamic Process with Mean Shift and Variance Change
 ====================================================================
 
 
